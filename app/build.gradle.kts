@@ -1,18 +1,20 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.example.praktikum7"
-    compileSdk {
-        version = release(37)
-    }
+    namespace = "com.example.roomsiswa"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.praktikum7"
+        applicationId = "com.example.roomsiswa"
         minSdk = 24
-        targetSdk = 37
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -21,9 +23,7 @@ android {
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -32,6 +32,12 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 
@@ -44,19 +50,19 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    testImplementation(libs.junit)
 
-    // Icons
+    //icon
     implementation(libs.compose.icons)
-    // Room
+//room
     implementation(libs.bundles.room)
-    ksp(libs.room.compiler) //
-    // ViewModel
+    ksp(libs.room.compiler)
+//viewmodel
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
-    // Navigasi
+//navigation
     implementation(libs.navigation.compose)
 
+    testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
