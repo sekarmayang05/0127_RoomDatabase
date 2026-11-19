@@ -1,10 +1,12 @@
 package com.example.praktikum7.room
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.intellij.lang.annotations.Flow
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SiswaDao {
@@ -13,4 +15,10 @@ interface SiswaDao {
 
     @Query("SELECT * from tblsiswa ORDER BY nama ASC")
     fun getAllSiswa(): Flow<List<Siswa>>
+
+    @Query("SELECT * from tblSiswa WHERE id = :id")
+    fun  getSiswa(id: Int) : Flow<Siswa>
+
+
 }
+
