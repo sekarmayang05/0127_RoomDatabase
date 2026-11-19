@@ -7,6 +7,6 @@ object DestinasiEditSiswa : DestinasiNavigasi {
     override val route = "item_edit"
     override val titleRes = R.string.edit_siswa
     const val itemIdArgs = "idsiswa"
-    val routeWithArgs = "$route/{$itemIdArgs"
+    val routeWithArgs = "$route/{$itemIdArgs}"
 
 }

@@ -1,19 +1,14 @@
+package com.example.praktikum7.view
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -21,79 +16,69 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.praktikum7.uicontroller.SiswaTopAppBar
+import com.example.praktikum7.view.uicontroller.DestinasiNavigasi
+import com.example.praktikum7.view.uicontroller.SiswaTopAppBar
 import com.example.praktikum7.viewmodel.DetailSiswa
 import com.example.praktikum7.viewmodel.EntryViewModel
+import com.example.praktikum7.viewmodel.PenyediaViewModel
+import com.example.praktikum7.viewmodel.UIStateSiswa
 import com.example.roomsiswa.R
-import com.example.roomsiswa.uicontroller.DestinasiEntry
-import com.example.roomsiswa.viewmodel.UiStateSiswa
 import kotlinx.coroutines.launch
+
+object DestinasiEntry: DestinasiNavigasi {
+    override val route = "item_entry"
+    override val titleRes = R.string.entry_siswa
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntrySiswaScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: EntryViewModel = viewModel(factory = PenyediaViewModel.Factory)
-){
+    viewModel: EntryViewModel = viewModel(factory = PenyediaViewModel .Factory)
+) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Box(modifier = modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                SiswaTopAppBar(
-                    title = stringResource(DestinasiEntry.titleRes),
-                    canNavigateBack = true,
-                    scrollBehavior = scrollBehavior,
-                    navigateUp = navigateBack
-                )
-            }
-        ) { innerPadding ->
-            EntrySiswaBody(
-                uiStateSiswa = viewModel.uiStateSiswa,
-                onSiswaValueChange = viewModel::updateUiState,
-                onSaveClick = {
-                    coroutineScope.launch {
-                        viewModel.saveSiswa()
-                        navigateBack()
-                    }
-                },
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            SiswaTopAppBar(
+                title = stringResource(DestinasiEntry.titleRes),
+                canNavigateBack = true,
+                scrollBehavior = scrollBehavior
             )
         }
-        FloatingActionButton(
-            onClick = {},
-            shape = MaterialTheme.shapes.medium,
+    ) { innerPadding ->
+        EntrySiswaBody(
+            uiStateSiswa = viewModel.uiStateSiswa,
+            onSiswaValueChange = viewModel::updateUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveSiswa()
+                    navigateBack()
+                }
+            },
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(dimensionResource(id = R.dimen.padding_large))
-        ) {
-            Icon(
-                imageVector = Icons.Default.Menu,
-                contentDescription = null
-            )
-        }
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        )
     }
 }
 
 @Composable
 fun EntrySiswaBody(
-    uiStateSiswa: UiStateSiswa,
+    uiStateSiswa: UIStateSiswa,
     onSiswaValueChange: (DetailSiswa) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_large)),
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium))
@@ -121,11 +106,11 @@ fun FormInputSiswa(
     modifier: Modifier = Modifier,
     onValueChange: (DetailSiswa) -> Unit = {},
     enabled: Boolean = true
-){
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
-    ){
+    ) {
         OutlinedTextField(
             value = detailSiswa.nama,
             onValueChange = { onValueChange(detailSiswa.copy(nama = it)) },
@@ -146,7 +131,7 @@ fun FormInputSiswa(
             value = detailSiswa.telpon,
             onValueChange = { onValueChange(detailSiswa.copy(telpon = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.telpon)) },
+            label = { Text(text = stringResource(R.string.telpon)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -158,8 +143,8 @@ fun FormInputSiswa(
             )
         }
         Divider(
-            thickness = dimensionResource(id = R.dimen.padding_small),
-            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_medium))
+            thickness = dimensionResource(R.dimen.padding_small),
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_medium))
         )
     }
 }

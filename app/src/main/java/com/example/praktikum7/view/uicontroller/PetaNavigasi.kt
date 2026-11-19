@@ -1,6 +1,5 @@
-package com.example.praktikum7.uicontroller
+package com.example.praktikum7.view.uicontroller
 
-import EntrySiswaScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -14,17 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.praktikum7.view.DestinasiHome
+import androidx.navigation.compose.composable
+import com.example.praktikum7.view.DestinasiEntry
+import com.example.praktikum7.view.EntrySiswaScreen
+import androidx.compose.foundation.R
 import com.example.praktikum7.view.HomeScreen
-import com.example.roomsiswa.R
-
 
 @Composable
-fun SiswaApp(navController: NavHostController= rememberNavController()){
+fun SiswaApp(navController: NavHostController = rememberNavController()) {
     HostNavigasi(navController = navController)
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SiswaTopAppBar(
@@ -34,7 +34,8 @@ fun SiswaTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigateUp: () -> Unit = {}
 ) {
-    CenterAlignedTopAppBar(title = { Text(title) },
+    CenterAlignedTopAppBar(
+        title = { Text(title) },
         modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
@@ -46,24 +47,34 @@ fun SiswaTopAppBar(
                     )
                 }
             }
-        })
+        }
+    )
 }
 
 @Composable
 fun HostNavigasi(
     navController: NavHostController,
     modifier: Modifier = Modifier
-){
-    NavHost(navController=navController, startDestination = DestinasiHome.route, modifier = Modifier)
-    {
-        composable(DestinasiHome.route){
+) {
+    NavHost(
+        navController = navController,
+        startDestination = DestinasiHome.route,
+        modifier = modifier
+    ) {
+        composable(DestinasiHome.route) {
             HomeScreen(
-                navigateToItemEntry = {navController.navigate(DestinasiEntry.route)},
-                modifier = modifier
+                navigateToItemEntry = {
+                    navController.navigate(DestinasiEntry.route)
+                },
             )
         }
-        composable(DestinasiEntry.route){
-            EntrySiswaScreen(navigateBack = { navController.popBackStack()})
+
+        composable(DestinasiEntry.route) {
+            EntrySiswaScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
